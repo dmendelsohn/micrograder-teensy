@@ -15,36 +15,31 @@
 #define MG_PRINT 0x01
 
 // Byte codes for GPIO events
-#define MG_PIN_MODE 0x20
-#define MG_DIGITAL_READ 0x21
-#define MG_DIGITAL_WRITE 0x22
-#define MG_ANALOG_READ 0x23
-#define MG_ANALOG_WRITE 0x24
-#define MG_READ_RES 0x25
-#define MG_WRITE_RES 0x26
+#define MG_DIGITAL_READ 0x20
+#define MG_DIGITAL_WRITE 0x21
+#define MG_ANALOG_READ 0x22
+#define MG_ANALOG_WRITE 0x23
 
 // Byte codes for IMU events
 #define MG_IMU_ACC 0x30
-#define MG_IMU_MAG 0x31
-#define MG_IMU_GYRO 0x32
-#define MG_IMU_TEMP 0x33
+#define MG_IMU_GYRO 0x31
+#define MG_IMU_MAG 0x32
 
 // Byte codes for OLED events
 #define MG_OLED_INIT 0x40
 #define MG_OLED_FULL 0x41
+#define MG_OLED_TILE 0x42
 
 // Byte codes for GPS events
 #define MG_GPS_FIX 0x50
-#define MG_GPS_READ 0x51
 
 // Byte codes for Wifi events
-#define MG_WIFI_CONN 0x60
-#define MG_WIFI_REQ 0x61
-#define MG_WIFI_RESP 0x62
+#define MG_WIFI_REQ 0x60
+#define MG_WIFI_RESP 0x61
 
 // Byte codes for responses
 #define MG_ACK 0x80
-#define MG_ERR 0x081
+#define MG_ERR 0x81
 
 
 #include <WString.h>

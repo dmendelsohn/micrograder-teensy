@@ -127,7 +127,7 @@ class U8G2 : public Print
       msg[0] = getBufferTileWidth();
       msg[1] = getBufferTileHeight();
       MicroGrader.sendMessage(MG_OLED_INIT, msg, 2);
-      #endif
+      #endif 
     }
 
     void beginSimple(void) {
