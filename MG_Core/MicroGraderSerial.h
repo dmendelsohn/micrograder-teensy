@@ -32,6 +32,6 @@ class MicroGraderSerial : public Stream
     uint8_t rts(void) { return 1; }
     operator bool() { return true; }
 };
-extern USBSerialDummy SerialDummy; // declaration of SerialDummy instance
+extern MicroGraderSerial MGSerial; // declaration of SerialDummy instance
 
 #endif

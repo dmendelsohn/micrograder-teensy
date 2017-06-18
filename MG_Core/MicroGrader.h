@@ -44,7 +44,7 @@
 
 #include <WString.h>
 #include <Arduino.h>
-#include "USBSerialDummy.h"
+#include "MicroGraderSerial.h"
 #include "MicroGraderPin.h"
 
 typedef uint8_t code_t;
@@ -76,7 +76,7 @@ extern MicroGraderCore MicroGrader; // declaration of MicroGraderCore instance
 
 
 #if TEST
-    #define Serial MicroGraderSerial  // Replace user Serial with SerialDummy
+    #define Serial MGSerial  // Replace user Serial with SerialDummy
 #endif
 
 #endif // MICROGRADER_H
