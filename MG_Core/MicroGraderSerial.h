@@ -1,12 +1,12 @@
-#ifndef USB_SERIAL_DUMMY_H
-#define USB_SERIAL_DUMMY_H
+#ifndef MICROGRADER_SERIAL_DUMMY_H
+#define MICROGRADER_SERIAL_DUMMY_H
 
 #include "Stream.h"
 
-// Dummy serial class; in TEST mode, uses of Serial will still compile, but
+// Wrapped serial class; in TEST mode, uses of Serial will still compile, but
 // will point to this dummy class instead.  We need exclusive control of
 // USB serial for MicroGrader
-class USBSerialDummy : public Stream
+class MicroGraderSerial : public Stream
 {
   public:
     void begin(long) { };

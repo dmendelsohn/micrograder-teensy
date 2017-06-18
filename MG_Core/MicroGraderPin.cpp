@@ -11,9 +11,8 @@ MicroGraderPin::MicroGraderPin() {
 
 // The functions below are substitutes for GPIO functions
 void MicroGraderPin::pinMode_(uint8_t pin, uint8_t mode) {
-    req_buffer[0] = pin;
-    req_buffer[1] = mode;
-    MicroGrader.sendMessage(MG_PIN_MODE, req_buffer, 2);
+    pinMode(pin, mode);
+    // Do nothing else, perhaps later we'll track this
 }
 
 int MicroGraderPin::digitalRead_(uint8_t pin) {

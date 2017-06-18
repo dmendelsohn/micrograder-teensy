@@ -76,7 +76,7 @@ extern MicroGraderCore MicroGrader; // declaration of MicroGraderCore instance
 
 
 #if TEST
-    #define Serial SerialDummy  // Replace user Serial with SerialDummy
+    #define Serial MicroGraderSerial  // Replace user Serial with SerialDummy
 #endif
 
 #endif // MICROGRADER_H
