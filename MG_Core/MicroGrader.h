@@ -13,6 +13,7 @@
 // Byte codes for system events
 #define MG_INIT 0x00
 #define MG_PRINT 0x01
+#define MG_END 0x02
 
 // Byte codes for GPIO events
 #define MG_DIGITAL_READ 0x20
