@@ -89,55 +89,54 @@ void MPU9250::getAres()
 }
 
 
-void MPU9250::readAccelData(int16_t * destination)
+void MPU9250::readAccelData(int16_t * destination, bool test_mode)
 {
-  #if TEST
-  // Request test inputs from host
-  int32_t Abound = 2;
-  switch (Ascale) { // buffer[0] is max accel in gs, -buffer[0] is min accel
-    case AFS_2G:
-      Abound = 2;
-      break;
-    case AFS_4G:
-      Abound = 4;
-      break;
-    case AFS_8G:
-      Abound = 8;
-      break;
-    case AFS_16G:
-      Abound = 16;
-      break;
-  }
-  // Buffer holds min value, max value, min bin, max bin
-  req_buffer[0] = INT16_MIN;
-  req_buffer[1] = INT16_MAX;
-  req_buffer[2] = -Abound;
-  req_buffer[3] = Abound;
-  uint16_t data_bytes = MicroGrader.sendMessage(MG_IMU_ACC, 
+  if(test_mode) {
+    // Request test inputs from host
+    int32_t Abound = 2;
+    switch (Ascale) { // buffer[0] is max accel in gs, -buffer[0] is min accel
+      case AFS_2G:
+        Abound = 2;
+        break;
+      case AFS_4G:
+        Abound = 4;
+        break;
+      case AFS_8G:
+        Abound = 8;
+        break;
+      case AFS_16G:
+        Abound = 16;
+        break;
+    }
+    // Buffer holds min value, max value, min bin, max bin
+    req_buffer[0] = INT16_MIN;
+    req_buffer[1] = INT16_MAX;
+    req_buffer[2] = -Abound;
+    req_buffer[3] = Abound;
+    uint16_t data_bytes = MicroGrader.sendMessage(MG_IMU_ACC, 
                           (uint8_t *)req_buffer, 4*sizeof(int32_t),
                           (uint8_t *)resp_buffer, 3*sizeof(int32_t));
-  if (data_bytes < 3*sizeof(int32_t)) {
-    MicroGrader.error(DATA_ERROR);
-  }
-  for (int i = 0; i < 3; i++) {
-    destination[i] = resp_buffer[i];
-  }
-  #else // Normal reading
+    if (data_bytes < 3*sizeof(int32_t)) {
+      MicroGrader.error(DATA_ERROR);
+    }
+    for (int i = 0; i < 3; i++) {
+      destination[i] = resp_buffer[i];
+    }
+  } else {
 
-  uint8_t rawData[6];  // x/y/z accel register data stored here
-  // Read the six raw data registers into data array
-  readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6, &rawData[0]); //TODO: uncomment
+    uint8_t rawData[6];  // x/y/z accel register data stored here
+    // Read the six raw data registers into data array
+    readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6, &rawData[0]); //TODO: uncomment
 
-  // Turn the MSB and LSB into a signed 16-bit value
-  destination[0] = ((int16_t)rawData[0] << 8) | rawData[1] ;
-  destination[1] = ((int16_t)rawData[2] << 8) | rawData[3] ;
-  destination[2] = ((int16_t)rawData[4] << 8) | rawData[5] ;
-
-  #endif
+    // Turn the MSB and LSB into a signed 16-bit value
+    destination[0] = ((int16_t)rawData[0] << 8) | rawData[1] ;
+    destination[1] = ((int16_t)rawData[2] << 8) | rawData[3] ;
+    destination[2] = ((int16_t)rawData[4] << 8) | rawData[5] ;
+    }
 }
 
 
-void MPU9250::readGyroData(int16_t * destination)
+void MPU9250::readGyroData(int16_t * destination, bool test_mode)
 {
   #if TEST
   // Request test inputs from host
@@ -185,7 +184,7 @@ void MPU9250::readGyroData(int16_t * destination)
 
 }
 
-void MPU9250::readMagData(int16_t * destination)
+void MPU9250::readMagData(int16_t * destination, bool test_mode)
 {
   #if TEST
   //Request inputs from host
@@ -597,8 +596,6 @@ void MPU9250::MPU9250SelfTest(float * destination)
   // Get average current values of gyro and acclerometer
   for (int ii = 0; ii < 200; ii++)
   {
-Serial.print("BHW::ii = ");
-Serial.println(ii);
     // Read the six raw data registers into data array
     readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6, &rawData[0]);
     // Turn the MSB and LSB into a signed 16-bit value
@@ -733,7 +730,7 @@ void MPU9250::magCalMPU9250(float * bias_dest, float * scale_dest)
 
   for (ii = 0; ii < sample_count; ii++)
   {
-    readMagData(mag_temp);  // Read the mag data
+    readMagData(mag_temp, false);  // Read the mag data
 
     for (int jj = 0; jj < 3; jj++)
     {

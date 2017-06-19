@@ -1,4 +1,4 @@
-#define TEST 1
+#define TEST 0
 
 #include "MicroGrader.h"
 #include "MPU9250.h"

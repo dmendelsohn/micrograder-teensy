@@ -11,17 +11,20 @@ const uint32_t MicroGraderCore::LO_MILLIS[] = {100, 500, 2000};
 
 // Should be called at the very beginning of setup().
 // Begins Serial connection and waits for remote program to begin reading.
-void MicroGraderCore::begin() {
-    Serial.begin(9600);
-    while (!Serial.dtr()); // Wait for Serial connection
-    pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, HIGH); // So we can visually see when connection has been made
-    delay(10); // Small delay is necessary, not sure why
-    sendMessage(MG_INIT, nullptr, 0); // Let grader know that connection is made
+void MicroGraderCore::begin(bool test_mode) {
+    if (test_mode) {
+        Serial.begin(9600);
+        while (!Serial.dtr()); // Wait for Serial connection
+        pinMode(LED_PIN, OUTPUT);
+        digitalWrite(LED_PIN, HIGH); // So we can visually see when connection has been made
+        delay(10); // Small delay is necessary, not sure why
+        sendMessage(MG_INIT, nullptr, 0); // Let grader know that connection is made
+    }
 }
 
 // No response expected (just ACK)
-uint16_t MicroGraderCore::sendMessage(code_t code, uint8_t *msg, msg_size_t msg_len) {
+uint16_t MicroGraderCore::sendMessage(code_t code,
+                                      uint8_t *msg, msg_size_t msg_len) {
     return sendMessage(code, msg, msg_len, nullptr, 0);
 }
 
@@ -29,7 +32,8 @@ uint16_t MicroGraderCore::sendMessage(code_t code, uint8_t *msg, msg_size_t msg_
 // Waits for, and processes, response.  Loads the response body into resp
 // If the response is ERR or there's a timeout, enter error state permanently.
 // Returns: the number of bytes received in response body
-uint16_t MicroGraderCore::sendMessage(code_t code, uint8_t *msg, msg_size_t msg_len,
+uint16_t MicroGraderCore::sendMessage(code_t code,
+                                      uint8_t *msg, msg_size_t msg_len,
                                       uint8_t *resp, msg_size_t resp_len) {
     // Later: perhaps helpful for robustness: empty Serial RX
 
@@ -102,6 +106,8 @@ void MicroGraderCore::error(MG_ErrorType error_type) {
 }
 
 //Send a debug statement to the host
-void MicroGraderCore::debug(String str) {
-    sendMessage(MG_PRINT, (uint8_t *)str.c_str(), str.length());
+void MicroGraderCore::debug(String str, bool test_mode) {
+    if (test_mode) {
+        sendMessage(MG_PRINT, (uint8_t *)str.c_str(), str.length());
+    }
 }

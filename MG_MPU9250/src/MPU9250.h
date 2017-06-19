@@ -12,7 +12,6 @@
 #include <Wire.h>
 
 #define SERIAL_DEBUG true
-//#define TEST 1
 
 // See also MPU-9250 Register Map and Descriptions, Revision 4.0,
 // RM-MPU-9250A-00, Rev. 1.4, 9/9/2013 for registers not listed in above
@@ -277,9 +276,20 @@ public:
     void getMres();
     void getGres();
     void getAres();
-    void readAccelData(int16_t *);
-    void readGyroData(int16_t *);
-    void readMagData(int16_t *);
+
+  #if TEST
+    void readAccelData(int16_t * dest) {readAccelData(dest, true);}
+    void readGyroData(int16_t * dest) {readGyroData(dest, true);}
+    void readMagData(int16_t * dest) {readMagData(dest, true);}
+  #else
+    void readAccelData(int16_t * dest) {readAccelData(dest, false);}
+    void readGyroData(int16_t * dest) {readGyroData(dest, false);}
+    void readMagData(int16_t * dest) {readMagData(dest, false);}
+  #endif
+    void readAccelData(int16_t *, bool);
+    void readGyroData(int16_t *, bool);
+    void readMagData(int16_t *, bool);
+
     int16_t readTempData();
     void updateTime();
     void initAK8963(float *);

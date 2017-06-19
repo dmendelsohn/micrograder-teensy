@@ -1,4 +1,4 @@
-#define TEST 0
+#define TEST 1
 
 #include "MicroGrader.h"
 #include "MPU9250.h"
@@ -24,7 +24,7 @@ void setup() {
 	#if TEST
 	MicroGrader.debug("Loop");
 	#endif
-	//delay(100); // This delay breaks the timing
+	delay(100); // This delay breaks the timing
 }
 
 void loop() {
@@ -32,7 +32,7 @@ void loop() {
 	oled.sendBuffer();
 	digitalWrite(13, LOW);
 	delay(1000);
-	oled.drawBox(20,10,20,10); // Change dimensions to break the test
+	oled.drawBox(20,10,20,11); // Change dimensions to break the test
 	oled.sendBuffer();
 	digitalWrite(13, HIGH);
 	delay(1000);

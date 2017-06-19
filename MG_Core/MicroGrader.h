@@ -59,14 +59,22 @@ enum MG_ErrorType {TIMEOUT_ERROR=0, RESP_ERROR=1, DATA_ERROR=2};
 
 class MicroGraderCore { // Essentially a static class to wrap all communication
   public:
-    void begin();
-    uint16_t sendMessage(code_t code, uint8_t *data, msg_size_t data_len);
-    uint16_t sendMessage(code_t code, uint8_t *data, msg_size_t data_len,
-                         uint8_t *resp, msg_size_t resp_len);
-    void error(MG_ErrorType error_type);
-    void debug(String str);
+  #if TEST
+    void begin() { begin(true); }
+    void debug(String str) {debug(str, true);}
+  #else
+    void begin() { begin(false); }
+    void debug(String str) {debug(str, false);}
+  #endif
+
+    uint16_t sendMessage(code_t, uint8_t *, msg_size_t);
+    uint16_t sendMessage(code_t, uint8_t *, msg_size_t, uint8_t *, msg_size_t);
+    void error(MG_ErrorType);
 
   private:
+    void begin(bool);
+    void debug(String, bool);
+
     uint8_t header_buffer[RESP_HEADER_SIZE];
 
     static uint32_t const HI_MILLIS[]; // blink times for error processing

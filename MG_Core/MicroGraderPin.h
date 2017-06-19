@@ -25,8 +25,6 @@ class MicroGraderPin {
     uint32_t analog_read_res;
     uint32_t analog_write_res;
 
-    //TODO: add RW analog resolution variables
-
 };
 extern MicroGraderPin PinWrapper; // declaration of MicroGraderPin instance
 
