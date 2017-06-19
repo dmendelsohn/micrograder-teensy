@@ -61,9 +61,11 @@ class MicroGraderCore { // Essentially a static class to wrap all communication
   public:
   #if TEST
     void begin() { begin(true); }
+    void begin(uint8_t pins[]) { begin(pins, true); }
     void debug(String str) {debug(str, true);}
   #else
     void begin() { begin(false); }
+    void begin(uint8_t pins[]) { begin(pins, false); }
     void debug(String str) {debug(str, false);}
   #endif
 
@@ -73,6 +75,7 @@ class MicroGraderCore { // Essentially a static class to wrap all communication
 
   private:
     void begin(bool);
+    void begin(uint8_t [], bool);
     void debug(String, bool);
 
     uint8_t header_buffer[RESP_HEADER_SIZE];

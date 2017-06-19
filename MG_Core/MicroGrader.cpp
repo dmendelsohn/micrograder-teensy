@@ -22,6 +22,11 @@ void MicroGraderCore::begin(bool test_mode) {
     }
 }
 
+void MicroGraderCore::begin(uint8_t pins[], bool test_mode) {
+    PinWrapper.enablePins(pins);
+    begin(test_mode);
+}
+
 // No response expected (just ACK)
 uint16_t MicroGraderCore::sendMessage(code_t code,
                                       uint8_t *msg, msg_size_t msg_len) {
