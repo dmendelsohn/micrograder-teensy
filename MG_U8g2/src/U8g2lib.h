@@ -160,7 +160,7 @@ class U8G2 : public Print
       u8g2_SendBuffer(&u8g2);
       #if TEST
       uint8_t *ptr = getBufferPtr(); // Organized in 8x8 "tiles"
-      uint8_t buffer_len = getBufferTileWidth() * getBufferTileHeight() * 8;
+      uint32_t buffer_len = getBufferTileWidth() * getBufferTileHeight() * 8;
       MicroGrader.sendMessage(MG_OLED_FULL, ptr, buffer_len);
       #endif
     }

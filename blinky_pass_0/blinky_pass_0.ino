@@ -19,13 +19,17 @@ void setup() {
   SPI.begin();  //SPI for OLED
 	oled.begin();
 	oled.clearBuffer();
+	MicroGrader.debug("Loop");
+	//delay(100); // This delay breaks the timing
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  Serial.println("This should not be sent");
-  MicroGrader.debug("Loop");
-	oled.drawBox(10,10,10,10);
+	oled.clearBuffer();
 	oled.sendBuffer();
+	digitalWrite(13, LOW);
+	delay(1000);
+	oled.drawBox(20,10,20,10); // Change dimensions to break the test
+	oled.sendBuffer();
+	digitalWrite(13, HIGH);
 	delay(1000);
 }

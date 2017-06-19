@@ -49,7 +49,7 @@ uint16_t MicroGraderCore::sendMessage(code_t code, uint8_t *msg, msg_size_t msg_
     msg_size_t received_bytes = 0; // includes header
     msg_size_t expected_body_bytes = 0;
     code_t resp_code = MG_ERR; // Assume error at first
-    uint32_t timeout = 10000; // Later: make this dynamic based on msg_len
+    uint32_t timeout = 50000; // Later: make this dynamic based on msg_len
 
     while (!has_response && t < timeout) {
         if (Serial.available()) { // Check if a character is available

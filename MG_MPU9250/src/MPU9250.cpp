@@ -91,15 +91,6 @@ void MPU9250::getAres()
 
 void MPU9250::readAccelData(int16_t * destination)
 {
-  uint8_t rawData[6];  // x/y/z accel register data stored here
-  // Read the six raw data registers into data array
-  readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6, &rawData[0]);
-
-  // Turn the MSB and LSB into a signed 16-bit value
-  destination[0] = ((int16_t)rawData[0] << 8) | rawData[1] ;
-  destination[1] = ((int16_t)rawData[2] << 8) | rawData[3] ;
-  destination[2] = ((int16_t)rawData[4] << 8) | rawData[5] ;
-
   #if TEST
   // Request test inputs from host
   int32_t Abound = 2;
@@ -131,21 +122,23 @@ void MPU9250::readAccelData(int16_t * destination)
   for (int i = 0; i < 3; i++) {
     destination[i] = resp_buffer[i];
   }
-  #endif
-}
+  #else // Normal reading
 
-
-void MPU9250::readGyroData(int16_t * destination)
-{
-  uint8_t rawData[6];  // x/y/z gyro register data stored here
-  // Read the six raw data registers sequentially into data array
-  readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6, &rawData[0]);
+  uint8_t rawData[6];  // x/y/z accel register data stored here
+  // Read the six raw data registers into data array
+  readBytes(MPU9250_ADDRESS, ACCEL_XOUT_H, 6, &rawData[0]); //TODO: uncomment
 
   // Turn the MSB and LSB into a signed 16-bit value
   destination[0] = ((int16_t)rawData[0] << 8) | rawData[1] ;
   destination[1] = ((int16_t)rawData[2] << 8) | rawData[3] ;
   destination[2] = ((int16_t)rawData[4] << 8) | rawData[5] ;
 
+  #endif
+}
+
+
+void MPU9250::readGyroData(int16_t * destination)
+{
   #if TEST
   // Request test inputs from host
   int32_t Gbound = 250; // +Gbound is max reading, -Gbound is min (in DPS)
@@ -176,11 +169,51 @@ void MPU9250::readGyroData(int16_t * destination)
   for (int i = 0; i < 3; i++) {
     destination[i] = resp_buffer[i];
   }  
+
+  #else // Normal reading
+
+  uint8_t rawData[6];  // x/y/z gyro register data stored here
+  // Read the six raw data registers sequentially into data array
+  readBytes(MPU9250_ADDRESS, GYRO_XOUT_H, 6, &rawData[0]); //TODO: uncomment
+
+  // Turn the MSB and LSB into a signed 16-bit value
+  destination[0] = ((int16_t)rawData[0] << 8) | rawData[1] ;
+  destination[1] = ((int16_t)rawData[2] << 8) | rawData[3] ;
+  destination[2] = ((int16_t)rawData[4] << 8) | rawData[5] ;
+
   #endif
+
 }
 
 void MPU9250::readMagData(int16_t * destination)
 {
+  #if TEST
+  //Request inputs from host
+  uint8_t res = 16;
+  switch (Mscale) { // Determine if 14 or 16 bit resolution
+    case MFS_14BITS:
+      res = 14;
+      break;
+    case MFS_16BITS:
+      res = 16;
+      break;
+  }
+  req_buffer[0] = -pow(2,res); // Min digitized value
+  req_buffer[1] = pow(2,res)-1; // Max digitized value
+  req_buffer[2] = -49120; // Minimum reading in milligauss
+  req_buffer[3] = 49120; // Maximum reading in milligauss
+  uint16_t data_bytes = MicroGrader.sendMessage(MG_IMU_MAG,
+                             (uint8_t *)req_buffer, 4*sizeof(int32_t), 
+                             (uint8_t *)resp_buffer, 3*sizeof(int32_t));
+  if (data_bytes < 3*sizeof(int32_t)) {
+    MicroGrader.error(DATA_ERROR);
+  }
+  for (int i = 0; i < 3; i++) {
+    destination[i] = resp_buffer[i];
+  } 
+
+  #else  //Do regular reading
+
   // x/y/z gyro register data, ST2 register stored here, must read ST2 at end
   // of data acquisition
   uint8_t rawData[7];
@@ -199,34 +232,10 @@ void MPU9250::readMagData(int16_t * destination)
       // Data stored as little Endian
       destination[1] = ((int16_t)rawData[3] << 8) | rawData[2];
       destination[2] = ((int16_t)rawData[5] << 8) | rawData[4];
-
-      #if TEST
-      //Request inputs from host
-      uint8_t res = 16;
-      switch (Mscale) { // Determine if 14 or 16 bit resolution
-        case MFS_14BITS:
-          res = 14;
-          break;
-        case MFS_16BITS:
-          res = 16;
-          break;
-      }
-      req_buffer[0] = -pow(2,res); // Min digitized value
-      req_buffer[1] = pow(2,res)-1; // Max digitized value
-      req_buffer[2] = -49120; // Minimum reading in milligauss
-      req_buffer[3] = 49120; // Maximum reading in milligauss
-      uint16_t data_bytes = MicroGrader.sendMessage(MG_IMU_MAG,
-                             (uint8_t *)req_buffer, 4*sizeof(int32_t), 
-                             (uint8_t *)resp_buffer, 3*sizeof(int32_t));
-      if (data_bytes < 3*sizeof(int32_t)) {
-        MicroGrader.error(DATA_ERROR);
-      }
-      for (int i = 0; i < 3; i++) {
-        destination[i] = resp_buffer[i];
-      }  
-      #endif
     }
   }
+
+  #endif
 }
 
 int16_t MPU9250::readTempData()
