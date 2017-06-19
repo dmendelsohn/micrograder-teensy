@@ -6,16 +6,15 @@
 
 void setup() {
 	MicroGrader.begin();
-  // put your setup code here, to run once:
-	MicroGrader.debug("Hello, world!");
-	pinMode(10, OUTPUT);
+	MicroGrader.debug("Setup");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   Serial.println("This should not be sent");
   MicroGrader.debug("Loop");
-  int n = digitalRead(10);
-  MicroGrader.debug("Got reading of " + String(n));
+  digitalWrite(13, HIGH);
+  analogWriteRes(10);
+  analogWrite(A0, 100);
   delay(1000);
 }
