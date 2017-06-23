@@ -24,7 +24,7 @@ class MicroGraderPin {
   private:
     bool isEnabled(uint8_t pin);
 
-    uint8_t req_buffer[1+5*sizeof(int32_t)];
+    uint8_t req_buffer[2+5*sizeof(int32_t)];
     uint8_t resp_buffer[sizeof(int32_t)];
     uint32_t analog_read_res;
     uint32_t analog_write_res;
@@ -34,8 +34,6 @@ class MicroGraderPin {
 
 };
 extern MicroGraderPin PinWrapper; // declaration of MicroGraderPin instance
-
-#if TEST
 
 #define pinMode PinWrapper.pinMode_
 
@@ -48,7 +46,5 @@ extern MicroGraderPin PinWrapper; // declaration of MicroGraderPin instance
 #define analogWriteResolution PinWrapper.analogWriteResolution_
 #define analogWriteRes PinWrapper.analogWriteResolution_
 #define analogWrite PinWrapper.analogWrite_
-
-#endif // TEST
 
 #endif

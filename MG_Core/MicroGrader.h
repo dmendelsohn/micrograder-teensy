@@ -55,29 +55,20 @@ typedef uint16_t msg_size_t;
 #define REQ_HEADER_SIZE (sizeof(code_t)+sizeof(timestamp_t)+sizeof(msg_size_t))
 #define RESP_HEADER_SIZE (sizeof(code_t)+sizeof(msg_size_t))
 
-enum MG_ErrorType {TIMEOUT_ERROR=0, RESP_ERROR=1, DATA_ERROR=2};
+enum MG_ErrorType {TIMEOUT_ERROR=0, RESP_ERROR=1, DATA_ERROR=2, INTERNAL_ERROR=3};
+enum MG_Mode {INACTIVE=0, TESTING=1, RECORD=2};
 
 class MicroGraderCore { // Essentially a static class to wrap all communication
   public:
-  #if TEST
-    void begin() { begin(true); }
-    void begin(uint8_t pins[]) { begin(pins, true); }
-    void debug(String str) {debug(str, true);}
-  #else
-    void begin() { begin(false); }
-    void begin(uint8_t pins[]) { begin(pins, false); }
-    void debug(String str) {debug(str, false);}
-  #endif
+    void begin();
+    void begin(uint8_t []);
+    void debug(String);
 
     uint16_t sendMessage(code_t, uint8_t *, msg_size_t);
     uint16_t sendMessage(code_t, uint8_t *, msg_size_t, uint8_t *, msg_size_t);
     void error(MG_ErrorType);
 
   private:
-    void begin(bool);
-    void begin(uint8_t [], bool);
-    void debug(String, bool);
-
     uint8_t header_buffer[RESP_HEADER_SIZE];
 
     static uint32_t const HI_MILLIS[]; // blink times for error processing
@@ -85,6 +76,7 @@ class MicroGraderCore { // Essentially a static class to wrap all communication
 
 };
 extern MicroGraderCore MicroGrader; // declaration of MicroGraderCore instance
+extern const MG_Mode mg_mode;
 
 
 #if TEST

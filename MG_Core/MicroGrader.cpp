@@ -3,16 +3,15 @@
 #include "MicroGrader.h"
 
 MicroGraderCore MicroGrader; // definition of MicroGraderCore instance
-const uint32_t MicroGraderCore::HI_MILLIS[] = {100, 500, 2000};
-const uint32_t MicroGraderCore::LO_MILLIS[] = {100, 500, 2000};
+const MG_Mode mg_mode = TESTING; // TODO: make this configurable
 
-
-//// PUBLIC FUNCTIONS
+const uint32_t MicroGraderCore::HI_MILLIS[] = {100, 500, 2000, 4000};
+const uint32_t MicroGraderCore::LO_MILLIS[] = {100, 500, 2000, 4000};
 
 // Should be called at the very beginning of setup().
 // Begins Serial connection and waits for remote program to begin reading.
-void MicroGraderCore::begin(bool test_mode) {
-    if (test_mode) {
+void MicroGraderCore::begin() {
+    if (mg_mode != INACTIVE) {
         Serial.begin(9600);
         while (!Serial.dtr()); // Wait for Serial connection
         pinMode(LED_PIN, OUTPUT);
@@ -22,9 +21,9 @@ void MicroGraderCore::begin(bool test_mode) {
     }
 }
 
-void MicroGraderCore::begin(uint8_t pins[], bool test_mode) {
+void MicroGraderCore::begin(uint8_t pins[]) {
     PinWrapper.enablePins(pins);
-    begin(test_mode);
+    begin();
 }
 
 // No response expected (just ACK)
@@ -111,8 +110,8 @@ void MicroGraderCore::error(MG_ErrorType error_type) {
 }
 
 //Send a debug statement to the host
-void MicroGraderCore::debug(String str, bool test_mode) {
-    if (test_mode) {
+void MicroGraderCore::debug(String str) {
+    if (mg_mode != INACTIVE) {
         sendMessage(MG_PRINT, (uint8_t *)str.c_str(), str.length());
     }
 }
