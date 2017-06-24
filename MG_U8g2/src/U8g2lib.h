@@ -117,19 +117,7 @@ class U8G2 : public Print
       u8g2_SetDisplayRotation(&u8g2, u8g2_cb); }
 
     
-    void begin(void) {
-      /* note: call to u8x8_utf8_init is not required here, this is done in the setup procedures before */
-      initDisplay(); clearDisplay(); setPowerSave(0);
-
-      #if TEST
-      // Added for MicroGrader
-      uint8_t msg[2]; // Will contain height and width in "tiles"
-      msg[0] = getBufferTileWidth();
-      msg[1] = getBufferTileHeight();
-      MicroGrader.sendMessage(MG_OLED_INIT, msg, 2);
-      #endif 
-    }
-
+    void begin(void);
     void beginSimple(void) {
       /* does not clear the display and does not wake up the display */
       /* user is responsible for calling clearDisplay() and setPowerSave(0) */
@@ -155,15 +143,7 @@ class U8G2 : public Print
 
     
     /* u8g2_buffer.c */
-    // Modified sendBuffer for MicroGrader
-    void sendBuffer(void) {
-      u8g2_SendBuffer(&u8g2);
-      #if TEST
-      uint8_t *ptr = getBufferPtr(); // Organized in 8x8 "tiles"
-      uint32_t buffer_len = getBufferTileWidth() * getBufferTileHeight() * 8;
-      MicroGrader.sendMessage(MG_OLED_FULL, ptr, buffer_len);
-      #endif
-    }
+    void sendBuffer(void);
     void clearBuffer(void) { u8g2_ClearBuffer(&u8g2); }    
     
     void firstPage(void) { u8g2_FirstPage(&u8g2); }
