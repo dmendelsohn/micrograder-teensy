@@ -79,8 +79,6 @@ class MicroGraderCore { // Essentially a static class to wrap all communication
 extern MicroGraderCore MicroGrader; // declaration of MicroGraderCore instance
 
 
-#if TEST
-    #define Serial MGSerial  // Replace user Serial with SerialDummy
-#endif
+#define Serial MGSerial  // Replace user Serial with SerialDummy
 
 #endif // MICROGRADER_H
