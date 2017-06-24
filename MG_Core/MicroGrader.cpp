@@ -2,6 +2,8 @@
 #include <Arduino.h>
 #include "MicroGrader.h"
 
+#undef Serial
+
 MicroGraderCore MicroGrader; // definition of MicroGraderCore instance
 //const MG_Mode mg_mode = TESTING; // TODO: make this configurable
 
@@ -116,3 +118,5 @@ void MicroGraderCore::debug(String str) {
         sendMessage(MG_PRINT, (uint8_t *)str.c_str(), str.length());
     }
 }
+
+#define Serial MGSerial

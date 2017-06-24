@@ -68,7 +68,7 @@ class MicroGraderCore { // Essentially a static class to wrap all communication
     uint16_t sendMessage(code_t, uint8_t *, msg_size_t, uint8_t *, msg_size_t);
     void error(MG_ErrorType);
 
-    MG_Mode mg_mode;
+    MG_Mode mg_mode = INACTIVE;
   private:
     uint8_t header_buffer[RESP_HEADER_SIZE];
 
@@ -78,7 +78,6 @@ class MicroGraderCore { // Essentially a static class to wrap all communication
 };
 extern MicroGraderCore MicroGrader; // declaration of MicroGraderCore instance
 
-
-#define Serial MGSerial  // Replace user Serial with SerialDummy
+#define Serial MGSerial  // Replace user Serial with MGSerial
 
 #endif // MICROGRADER_H

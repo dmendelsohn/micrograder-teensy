@@ -42,6 +42,7 @@ class MicroGraderSerial : public Stream
     uint8_t dtr(void);
     uint8_t rts(void);
     operator bool() { return mg_bool(); }
+    void blah() { }
 };
 extern MicroGraderSerial MGSerial; // declaration of SerialDummy instance
 

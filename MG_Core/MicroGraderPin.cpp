@@ -2,6 +2,18 @@
 #include "MicroGrader.h"
 #include "MicroGraderPin.h"
 
+#undef pinMode
+
+#undef digitalRead
+#undef digitalWrite
+
+#undef analogReadResolution
+#undef analogReadRes
+#undef analogRead
+#undef analogWriteResolution
+#undef analogWriteRes
+#undef analogWrite
+
 MicroGraderPin PinWrapper; // definition of MicroGraderPin instance
 
 MicroGraderPin::MicroGraderPin() {
@@ -135,3 +147,15 @@ bool MicroGraderPin::isEnabled(uint8_t pin) {
     }
     return false;
 }
+
+#define pinMode PinWrapper.pinMode_
+
+#define digitalRead PinWrapper.digitalRead_
+#define digitalWrite PinWrapper.digitalWrite_
+
+#define analogReadResolution PinWrapper.analogReadResolution_
+#define analogReadRes PinWrapper.analogReadResolution_
+#define analogRead PinWrapper.analogRead_
+#define analogWriteResolution PinWrapper.analogWriteResolution_
+#define analogWriteRes PinWrapper.analogWriteResolution_
+#define analogWrite PinWrapper.analogWrite_

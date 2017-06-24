@@ -1,5 +1,9 @@
+#include <Arduino.h>
+
 #include "MicroGrader.h"
 #include "MicroGraderSerial.h"
+
+#undef Serial
 
 MicroGraderSerial MGSerial; // definition of dummy Serial instance
 
@@ -52,6 +56,9 @@ size_t mg_usb_write(const uint8_t *buffer, size_t size) {
 void MicroGraderSerial::begin(long x) {
     if (MicroGrader.mg_mode == INACTIVE) {
         Serial.begin(x);
+        //pinMode(13, OUTPUT);
+        //digitalWrite(13, HIGH);
+        //Serial.blah();
     }
 }
 
@@ -163,3 +170,4 @@ bool mg_bool() {
     }
 }
 
+#define Serial MGSerial
