@@ -268,8 +268,8 @@ public:
     int16_t accelCount[3];
 
     // For MicroGrader extensions
-    int32_t req_buffer[4];
-    int32_t resp_buffer[3];
+    uint8_t req_buffer[1+7*sizeof(int32_t)];
+    uint8_t resp_buffer[3*sizeof(int32_t)];
 
     // Public method declarations
     MPU9250(int8_t csPin=NOT_SPI);
@@ -277,18 +277,9 @@ public:
     void getGres();
     void getAres();
 
-  #if TEST
-    void readAccelData(int16_t * dest) {readAccelData(dest, true);}
-    void readGyroData(int16_t * dest) {readGyroData(dest, true);}
-    void readMagData(int16_t * dest) {readMagData(dest, true);}
-  #else
-    void readAccelData(int16_t * dest) {readAccelData(dest, false);}
-    void readGyroData(int16_t * dest) {readGyroData(dest, false);}
-    void readMagData(int16_t * dest) {readMagData(dest, false);}
-  #endif
-    void readAccelData(int16_t *, bool);
-    void readGyroData(int16_t *, bool);
-    void readMagData(int16_t *, bool);
+    void readAccelData(int16_t *);
+    void readGyroData(int16_t *);
+    void readMagData(int16_t *);
 
     int16_t readTempData();
     void updateTime();

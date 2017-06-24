@@ -1,7 +1,7 @@
-#define TEST 1
+#include "MicroGrader.h"
+MG_Mode mode = TESTING;
 uint8_t test_pins[] = {6, 13};
 
-#include "MicroGrader.h"
 #include "MPU9250.h"
 #include <U8g2lib.h>
 
@@ -13,7 +13,7 @@ SCREEN oled(U8G2_R2, 10, 15, 16); //declare oled with shorter SCREEN class name
 MPU9250 imu;
 
 void setup() {
-	MicroGrader.begin(test_pins);
+	MicroGrader.begin(mode, test_pins);
 	MicroGrader.debug("Setup");
 	pinMode(13, OUTPUT);
   SPI.setSCK(SPI_CLK); // move the SPI SCK pin from default of 13

@@ -23,13 +23,13 @@ void MicroGraderPin::pinMode_(uint8_t pin, uint8_t mode) {
 }
 
 int MicroGraderPin::digitalRead_(uint8_t pin) {
-    if (mg_mode == INACTIVE) {
+    if (MicroGrader.mg_mode == INACTIVE) {
         return digitalRead(pin);
     } else if (!isEnabled(pin)) {
         return digitalRead(pin); // Do real read if pin is not enabled in wrapper
     } else { // Either in TESTING or RECORDING mode
         req_buffer[0] = pin;
-        if (mg_mode == RECORD) {
+        if (MicroGrader.mg_mode == RECORD) {
             req_buffer[1] = 1; // Flags
             uint8_t real_val = digitalRead(pin);
             req_buffer[2] = real_val;
@@ -60,7 +60,7 @@ int MicroGraderPin::digitalRead_(uint8_t pin) {
 
 void MicroGraderPin::digitalWrite_(uint8_t pin, uint8_t val) {
     digitalWrite(pin, val); // Do actual write
-    if (mg_mode == INACTIVE) return; // No further action
+    if (MicroGrader.mg_mode == INACTIVE) return; // No further action
     if (!isEnabled(pin)) return; // Return if this pin is not test-enabled
 
     req_buffer[0] = pin;
@@ -75,7 +75,7 @@ void MicroGraderPin::analogReadResolution_(uint32_t bits) {
 }
 
 int MicroGraderPin::analogRead_(uint8_t pin) {
-    if (mg_mode == INACTIVE) {
+    if (MicroGrader.mg_mode == INACTIVE) {
         return analogRead(pin); // Regular read
     } else if (!isEnabled(pin)) {
         return analogRead(pin); // Do real read if pin is not enabled in wrapper
@@ -86,7 +86,7 @@ int MicroGraderPin::analogRead_(uint8_t pin) {
         *((int32_t *)(req_buffer + 2 + 1*sizeof(int32_t))) = max_bin;
         *((int32_t *)(req_buffer + 2 + 2*sizeof(int32_t))) = 0; // Min is 0V
         *((int32_t *)(req_buffer + 2 + 3*sizeof(int32_t))) = 3300; // Max is 3.3V
-        if (mg_mode == RECORD) {
+        if (MicroGrader.mg_mode == RECORD) {
             req_buffer[1] = 1; // Flags
             int real_val = analogRead(pin);
             *((int32_t *)(req_buffer + 2 + 4*sizeof(int32_t))) = real_val;
@@ -113,7 +113,7 @@ void MicroGraderPin::analogWriteResolution_(uint32_t bits) {
 
 void MicroGraderPin::analogWrite_(uint8_t pin, int val) {
     analogWrite(pin, val); // Do actual write
-    if (mg_mode == INACTIVE) return; // No further action
+    if (MicroGrader.mg_mode == INACTIVE) return; // No further action
     if (!isEnabled(pin)) return; // End early if pin is not enabled
 
     int32_t max_bin = pow(2,analog_write_res) - 1;

@@ -60,14 +60,15 @@ enum MG_Mode {INACTIVE=0, TESTING=1, RECORD=2};
 
 class MicroGraderCore { // Essentially a static class to wrap all communication
   public:
-    void begin();
-    void begin(uint8_t []);
+    void begin(MG_Mode);
+    void begin(MG_Mode, uint8_t []);
     void debug(String);
 
     uint16_t sendMessage(code_t, uint8_t *, msg_size_t);
     uint16_t sendMessage(code_t, uint8_t *, msg_size_t, uint8_t *, msg_size_t);
     void error(MG_ErrorType);
 
+    MG_Mode mg_mode;
   private:
     uint8_t header_buffer[RESP_HEADER_SIZE];
 
@@ -76,7 +77,6 @@ class MicroGraderCore { // Essentially a static class to wrap all communication
 
 };
 extern MicroGraderCore MicroGrader; // declaration of MicroGraderCore instance
-extern const MG_Mode mg_mode;
 
 
 #if TEST

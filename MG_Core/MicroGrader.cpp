@@ -3,14 +3,15 @@
 #include "MicroGrader.h"
 
 MicroGraderCore MicroGrader; // definition of MicroGraderCore instance
-const MG_Mode mg_mode = TESTING; // TODO: make this configurable
+//const MG_Mode mg_mode = TESTING; // TODO: make this configurable
 
 const uint32_t MicroGraderCore::HI_MILLIS[] = {100, 500, 2000, 4000};
 const uint32_t MicroGraderCore::LO_MILLIS[] = {100, 500, 2000, 4000};
 
 // Should be called at the very beginning of setup().
 // Begins Serial connection and waits for remote program to begin reading.
-void MicroGraderCore::begin() {
+void MicroGraderCore::begin(MG_Mode mode) {
+    mg_mode = mode;
     if (mg_mode != INACTIVE) {
         Serial.begin(9600);
         while (!Serial.dtr()); // Wait for Serial connection
@@ -21,9 +22,9 @@ void MicroGraderCore::begin() {
     }
 }
 
-void MicroGraderCore::begin(uint8_t pins[]) {
+void MicroGraderCore::begin(MG_Mode mode, uint8_t pins[]) {
     PinWrapper.enablePins(pins);
-    begin();
+    begin(mode);
 }
 
 // No response expected (just ACK)
