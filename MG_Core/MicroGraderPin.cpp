@@ -41,7 +41,7 @@ int MicroGraderPin::digitalRead_(uint8_t pin) {
         return digitalRead(pin); // Do real read if pin is not enabled in wrapper
     } else { // Either in TESTING or RECORDING mode
         req_buffer[0] = pin;
-        if (MicroGrader.mg_mode == RECORD) {
+        if (MicroGrader.mg_mode == RECORDING) {
             req_buffer[1] = 1; // Flags
             uint8_t real_val = digitalRead(pin);
             req_buffer[2] = real_val;
@@ -98,7 +98,7 @@ int MicroGraderPin::analogRead_(uint8_t pin) {
         *((int32_t *)(req_buffer + 2 + 1*sizeof(int32_t))) = max_bin;
         *((int32_t *)(req_buffer + 2 + 2*sizeof(int32_t))) = 0; // Min is 0V
         *((int32_t *)(req_buffer + 2 + 3*sizeof(int32_t))) = 3300; // Max is 3.3V
-        if (MicroGrader.mg_mode == RECORD) {
+        if (MicroGrader.mg_mode == RECORDING) {
             req_buffer[1] = 1; // Flags
             int real_val = analogRead(pin);
             *((int32_t *)(req_buffer + 2 + 4*sizeof(int32_t))) = real_val;

@@ -56,7 +56,7 @@ typedef uint16_t msg_size_t;
 #define RESP_HEADER_SIZE (sizeof(code_t)+sizeof(msg_size_t))
 
 enum MG_ErrorType {TIMEOUT_ERROR=0, RESP_ERROR=1, DATA_ERROR=2, INTERNAL_ERROR=3};
-enum MG_Mode {INACTIVE=0, TESTING=1, RECORD=2};
+enum MG_Mode {INACTIVE=0, TESTING=1, RECORDING=2};
 
 class MicroGraderCore { // Essentially a static class to wrap all communication
   public:

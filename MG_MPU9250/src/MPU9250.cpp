@@ -125,7 +125,7 @@ void MPU9250::readAccelData(int16_t * destination)
     *(int32_t *)(req_buffer + 1 + 2*sizeof(int32_t)) = -Abound;
     *(int32_t *)(req_buffer + 1 + 3*sizeof(int32_t)) = Abound;
 
-    if (MicroGrader.mg_mode == RECORD) { // Send real values in message
+    if (MicroGrader.mg_mode == RECORDING) { // Send real values in message
       req_buffer[0] = 1; // flag
       *(int32_t *)(req_buffer + 1 + 4*sizeof(int32_t)) = destination[0];
       *(int32_t *)(req_buffer + 1 + 5*sizeof(int32_t)) = destination[1];
@@ -162,7 +162,7 @@ void MPU9250::readGyroData(int16_t * destination)
     destination[2] = ((int16_t)rawData[4] << 8) | rawData[5] ;
   }
 
-  if (MicroGrader.mg_mode != INACTIVE) {  // Either TESTING or RECORD
+  if (MicroGrader.mg_mode != INACTIVE) {  // Either TESTING or RECORDING
     // Request to host
     int32_t Gbound = 250; // +Gbound is max reading, -Gbound is min (in DPS)
     switch (Gscale) {
@@ -186,7 +186,7 @@ void MPU9250::readGyroData(int16_t * destination)
     *(int32_t *)(req_buffer + 1 + 2*sizeof(int32_t)) = -Gbound;
     *(int32_t *)(req_buffer + 1 + 3*sizeof(int32_t)) = Gbound;
 
-    if (MicroGrader.mg_mode == RECORD) { // Send real values in message
+    if (MicroGrader.mg_mode == RECORDING) { // Send real values in message
       req_buffer[0] = 1; // flag
       *(int32_t *)(req_buffer + 1 + 4*sizeof(int32_t)) = destination[0];
       *(int32_t *)(req_buffer + 1 + 5*sizeof(int32_t)) = destination[1];
@@ -235,7 +235,7 @@ void MPU9250::readMagData(int16_t * destination)
     }
   }
 
-  if (MicroGrader.mg_mode != INACTIVE) { // Either TESTING or RECORD
+  if (MicroGrader.mg_mode != INACTIVE) { // Either TESTING or RECORDING
     // Request to host
     uint8_t res = 16;
     switch (Mscale) { // Determine if 14 or 16 bit resolution
@@ -253,7 +253,7 @@ void MPU9250::readMagData(int16_t * destination)
     *(int32_t *)(req_buffer + 1 + 2*sizeof(int32_t)) = -49120; // in milliGauss
     *(int32_t *)(req_buffer + 1 + 3*sizeof(int32_t)) = 49120; // in milliGauss
 
-    if (MicroGrader.mg_mode == RECORD) {
+    if (MicroGrader.mg_mode == RECORDING) {
       req_buffer[0] = 1; // flag
       *(int32_t *)(req_buffer + 1 + 4*sizeof(int32_t)) = destination[0];
       *(int32_t *)(req_buffer + 1 + 5*sizeof(int32_t)) = destination[1];
