@@ -3,6 +3,8 @@
 #include "MicroGrader.h"
 
 #undef Serial
+#undef pinMode
+#undef digitalWrite
 
 MicroGraderCore MicroGrader; // definition of MicroGraderCore instance
 //const MG_Mode mg_mode = TESTING; // TODO: make this configurable
@@ -120,3 +122,5 @@ void MicroGraderCore::debug(String str) {
 }
 
 #define Serial MGSerial
+#define pinMode PinWrapper.pinMode_
+#define digitalWrite PinWrapper.digitalWrte_

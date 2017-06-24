@@ -1,5 +1,5 @@
 #include "MicroGrader.h"
-MG_Mode mode = INACTIVE;
+MG_Mode mode = TESTING;
 uint8_t test_pins[] = {6, 13};
 
 #include <U8g2lib.h>
@@ -19,34 +19,42 @@ void setup() {
 	Serial.println("Setup");
 
 	pinMode(13, OUTPUT);
-	digitalWrite(13, HIGH);
-
 	pinMode(A0, OUTPUT);
-	analogWrite(A0, 150);
 	
   SPI.setSCK(SPI_CLK); // move the SPI SCK pin from default of 13
   SPI.begin();  //SPI for OLED
 	oled.begin();
 	oled.clearBuffer();
 	oled.drawBox(10, 10, 10, 10);
-	oled.sendBuffer();
 	
 	setup_angle();
 }
 
+
+String s;
 void loop() {
 	Serial.println("Loop");
-  MicroGrader.debug("MG Loop");
+  MicroGrader.debug("Loop");
+  oled.sendBuffer();
+  digitalWrite(13, HIGH);
+	analogWrite(A0, 150);
+
 
   imu.readAccelData(imu.accelCount);
-  Serial.println(three_axis_string(imu.accelCount));
+  s = three_axis_string(imu.accelCount);
+  Serial.println(s);
+  MicroGrader.debug(s);
   
   imu.readGyroData(imu.gyroCount);
-  Serial.println(three_axis_string(imu.gyroCount));
-
+  s = three_axis_string(imu.gyroCount);
+  Serial.println(s);
+  MicroGrader.debug(s);
+  
 	imu.readMagData(imu.magCount);
-  Serial.println(three_axis_string(imu.magCount));
-
+  s = three_axis_string(imu.magCount);
+  Serial.println(s);
+  MicroGrader.debug(s);
+  
   Serial.println();
 
 	delay(1000);

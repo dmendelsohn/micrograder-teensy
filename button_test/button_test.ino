@@ -1,5 +1,5 @@
 #include "MicroGrader.h"
-MG_Mode mode = INACTIVE;
+MG_Mode mode = TESTING;
 uint8_t test_pins[] = {6, 13};
 
 #include "MPU9250.h"
@@ -13,11 +13,12 @@ SCREEN oled(U8G2_R2, 10, 15, 16); //declare oled with shorter SCREEN class name
 MPU9250 imu;
 
 void setup() {
-	//MicroGrader.begin(mode, test_pins);
-	//MicroGrader.debug("Setup");
+	MicroGrader.begin(mode, test_pins);
+	MicroGrader.debug("Setup");
 	Serial.begin(9600);
-	delay(100);
+	delay(250);
 	Serial.println("Inactive mode: setup");
+	
 	pinMode(13, OUTPUT);
 	pinMode(6, INPUT_PULLUP);
 	pinMode(9, INPUT_PULLUP);
@@ -25,6 +26,8 @@ void setup() {
   SPI.begin();  //SPI for OLED
 	oled.begin();
 	oled.clearBuffer();
+
+	MicroGrader.debug("Loop");
 }
 
 void loop() {
