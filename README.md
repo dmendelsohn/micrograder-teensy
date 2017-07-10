@@ -9,7 +9,28 @@ TODO
 ```c
 #include "MicroGrader.h"
 MG_Mode mode = INACTIVE;
-uint8_t test_pins[] = {BUTTON_PIN};
+uint8_t test_pins[] = {0,1,2,3};
 ```
 
-* TODO
+    * The options for `mode` are `INACTIVE`, `TESTING`, and `RECORDING`
+    * `test_pins` is an array of ints.
+
+* Add the following line at the beginning of `setup()`:
+
+```c
+MicroGrader.begin(mode, test_pins);
+```
+
+* Add the following line at the end of `setup()`:
+
+```c
+MicroGrader.debug("Start");
+```
+
+# Usage
+* INACTIVE mode
+    * TODO
+* RECORDING mode
+    * TODO
+* TESTING mode
+    * TODO
