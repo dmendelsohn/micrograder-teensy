@@ -1,5 +1,5 @@
 #include "MicroGrader.h"
-MG_Mode mode = TESTING;
+MG_Mode mode = RECORDING;
 uint8_t test_pins[] = {6, 13};
 
 
