@@ -202,8 +202,10 @@ void ESP8266::sendRequest(int type, String domain, int port, String path, String
     request_p->big = false;
     hasRequest = true;
     responseReady = false;
+    if (MicroGrader.mg_mode != INACTIVE) { // Send INIT message for MicroGrader
+      MicroGrader.sendMessage(MG_WIFI_REQ, nullptr, 0);
+    }
     enableTimer();
-    //benchmark = millis();
   } else if (serialYes) {
     Serial.println("Could not make request; one is already in progress");
   }
@@ -281,11 +283,12 @@ String ESP8266::getResponse() {
   disableTimer();
   String r = "";
   if (responseReady) {
-    //benchmark = millis() - benchmark;
-    //Serial.println(benchmark);
     r = ((char *)response);
     response[0] = '\0';
     responseReady = false; // after getting response, hasResponse() is false
+    if (MicroGrader.mg_mode != INACTIVE) { // Send INIT message for MicroGrader
+      MicroGrader.sendMessage(MG_WIFI_RESP, nullptr, 0);
+    }
   } else if (serialYes) {
     Serial.println("No response ready");
   }
