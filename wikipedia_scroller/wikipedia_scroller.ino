@@ -7,7 +7,7 @@ uint8_t test_pins[] = {BUTTON_PIN};
 #include <MPU9250.h>
 #include <U8g2lib.h>
 #include <math.h>
-#include <Wifi_S08_v2.h>
+#include <Wifi.h>
 #include <SPI.h>
 #include <Wire.h>
 #define SCREEN_WIDTH 128
@@ -20,8 +20,8 @@ SCREEN oled(U8G2_R2, 10, 15,16);  //Arduboy (Production, Kickstarter Edition)
 ESP8266 wifi = ESP8266(0,true);
 
 // IOT variables and constants
-const String SSID = "MIT";
-const String PASSWD = "";
+const String SSID = "Mendy";
+const String PASSWD = "phialpha";
 const String HOST = "iesc-s2.mit.edu";
 const int PORT = 80;
 const String KERBEROS = "dmendels";  // your kerberos (need to change)
@@ -144,7 +144,6 @@ class WikipediaGetter{
   		} else if(state==2) {
     		if (!wifi.isBusy()) {
       		String total_query = "topic="+query_string;
-      		MicroGrader.debug("Wifi Request");
       		wifi.sendRequest(GET, HOST, PORT, path, total_query);
       		state = 3;
       		query_string = "";
@@ -154,7 +153,6 @@ class WikipediaGetter{
     		}
   		} else if(state==3) {
     		if ( wifi.hasResponse()) {
-    			MicroGrader.debug("Wifi Response");
       		message = wifi.getResponse();
       		int htmlindex = message.indexOf("</html>");
       		message = message.substring(6,htmlindex);

@@ -4,7 +4,7 @@
 //Edited for 6.S08 Spring 2017
 
 
-#include "Wifi_S08_v2.h"
+#include "Wifi.h"
 #include <WString.h>
 #include <Arduino.h>
 #include "MicroGrader.h"
