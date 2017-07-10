@@ -8,12 +8,9 @@ TODO
 
 ```c
 #include "MicroGrader.h"
-MG_Mode mode = INACTIVE;
-uint8_t test_pins[] = {0,1,2,3};
+MG_Mode mode = INACTIVE; // INACTIVE, TESTING, or RECORDING
+uint8_t test_pins[] = {0,1,2,3}; // array of ints representing pins numbers
 ```
-
-    * The options for `mode` are `INACTIVE`, `TESTING`, and `RECORDING`
-    * `test_pins` is an array of ints.
 
 * Add the following line at the beginning of `setup()`:
 
@@ -24,13 +21,21 @@ MicroGrader.begin(mode, test_pins);
 * Add the following line at the end of `setup()`:
 
 ```c
-MicroGrader.debug("Start");
+MicroGrader.debug("Start"); // Helpful, but not required, to mark end of setup()
 ```
 
 # Usage
 * INACTIVE mode
-    * TODO
+    * In this mode, the system should function as if the MicroGrader module
+    weren't there.  There will be no interaction with the host at all.
 * RECORDING mode
-    * TODO
+    * In this mode, the system will report all input readings and output
+    commands to the host, as well as various system events (such as Wifi
+    requests and responses).  The `MicroGrader.begin()` function will block
+    until the host connects.  With regards to the `analogRead`, `analogWrite`,
+    `digitalRead`, and `digitalWrite` functions, the system will only report if
+    the pin number is in the `test_pins` array.
 * TESTING mode
-    * TODO
+    * Same as RECORDING mode, except input readings work differently.  Instead
+    of taking a real sensor measurement and reporting it to the host, the
+    system queries the host for a virtual measurement.
