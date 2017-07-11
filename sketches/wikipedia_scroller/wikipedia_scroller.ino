@@ -20,8 +20,8 @@ SCREEN oled(U8G2_R2, 10, 15,16);  //Arduboy (Production, Kickstarter Edition)
 ESP8266 wifi = ESP8266(0,true);
 
 // IOT variables and constants
-const String SSID = "Mendy";
-const String PASSWD = "phialpha";
+const String SSID = "J2";
+const String PASSWD = "18611865";
 const String HOST = "iesc-s2.mit.edu";
 const int PORT = 80;
 const String KERBEROS = "dmendels";  // your kerberos (need to change)
@@ -179,6 +179,7 @@ void setup() {
   pinMode(BUTTON_PIN, INPUT_PULLUP);//set up pin!
   setup_angle();
   wifi.begin();
+  //while (!wifi.isConnected());
   wifi.connectWifi(SSID, PASSWD);
   oled.setFont(u8g2_font_5x7_mf); //small, stylish font
   MicroGrader.debug("Start");

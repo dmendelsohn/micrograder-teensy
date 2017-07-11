@@ -19,8 +19,8 @@ void MicroGraderCore::begin(MG_Mode mode) {
     if (mg_mode != INACTIVE) {
         Serial.begin(9600);
         while (!Serial.dtr()); // Wait for Serial connection
-        pinMode(LED_PIN, OUTPUT);
-        digitalWrite(LED_PIN, HIGH); // So we can visually see when connection has been made
+        pinMode(MG_LED_PIN, OUTPUT);
+        digitalWrite(MG_LED_PIN, HIGH); // So we can visually see when connection has been made
         delay(10); // Small delay is necessary, not sure why
         sendMessage(MG_INIT, nullptr, 0); // Let grader know that connection is made
     }
@@ -105,11 +105,11 @@ uint16_t MicroGraderCore::sendMessage(code_t code,
 // Enter permanent error state with blinking LED.  Frequency of
 //     blink corresponds to different causes of error.
 void MicroGraderCore::error(MG_ErrorType error_type) {
-    pinMode(LED_PIN, OUTPUT);
+    pinMode(MG_LED_PIN, OUTPUT);
     while (true) {
-        digitalWrite(LED_PIN, HIGH);
+        digitalWrite(MG_LED_PIN, HIGH);
         delay(HI_MILLIS[error_type]);
-        digitalWrite(LED_PIN, LOW);
+        digitalWrite(MG_LED_PIN, LOW);
         delay(LO_MILLIS[error_type]);
     }       
 }

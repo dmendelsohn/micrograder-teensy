@@ -8,7 +8,7 @@
 
 // Constants
 #define MG_VERSION "0.1"
-#define LED_PIN 13
+#define MG_LED_PIN 13
 
 // Byte codes for system events
 #define MG_INIT 0x00
