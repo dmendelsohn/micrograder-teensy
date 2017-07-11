@@ -34,7 +34,9 @@ MicroGrader.debug("Start"); // Helpful, but not required, to mark end of setup()
     requests and responses).  The `MicroGrader.begin()` function will block
     until the host connects.  With regards to the `analogRead`, `analogWrite`,
     `digitalRead`, and `digitalWrite` functions, the system will only report if
-    the pin number is in the `test_pins` array.
+    the pin number is in the `test_pins` array.  The functions of the `Serial`
+    object won't do anything.  Using the `MicroGrader.debug(String)` function
+    is helpful to send plain text messages to the host.
 * TESTING mode
     * Same as RECORDING mode, except input readings work differently.  Instead
     of taking a real sensor measurement and reporting it to the host, the
