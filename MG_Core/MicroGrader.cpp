@@ -31,20 +31,43 @@ void MicroGraderCore::begin(MG_Mode mode, uint8_t pins[]) {
     begin(mode);
 }
 
+
+
 // No response expected (just ACK)
 uint16_t MicroGraderCore::sendMessage(code_t code,
                                       uint8_t *msg, msg_size_t msg_len) {
-    return sendMessage(code, msg, msg_len, nullptr, 0);
+    return sendMessage(code, msg, msg_len, nullptr, 0, false);
 }
 
+uint16_t MicroGraderCore::sendMessage(code_t code,
+                                      uint8_t *msg, msg_size_t msg_len,
+                                      bool expects_resp) {
+    return sendMessage(code, msg, msg_len, nullptr, 0, expects_resp);
+}
+
+uint16_t MicroGraderCore::sendMessage(code_t code,
+                                      uint8_t *msg, msg_size_t msg_len,
+                                      uint8_t *resp, msg_size_t resp_len) {
+    return sendMessage(code, msg, msg_len, resp, resp_len, true);
+}
+
+//TODO: update dec
 // Sends the message header followed by message body.
-// Waits for, and processes, response.  Loads the response body into resp
+// If expects_resp is false, returns immediately after sending
+// Else, waits for, and processes, response.  Loads the response body into resp
 // If the response is ERR or there's a timeout, enter error state permanently.
 // Returns: the number of bytes received in response body
 uint16_t MicroGraderCore::sendMessage(code_t code,
                                       uint8_t *msg, msg_size_t msg_len,
-                                      uint8_t *resp, msg_size_t resp_len) {
+                                      uint8_t *resp, msg_size_t resp_len,
+                                      bool expects_resp) {
     // Later: perhaps helpful for robustness: empty Serial RX
+
+    // Mask and reset top bit of code (1 indicates "Do not respond")
+    code &= 0x7F;
+    if (!expects_resp) {
+        code += 0x80;
+    }
 
     // First, send the header (code, timestamp, body_size)
     timestamp_t timestamp = millis();
@@ -55,6 +78,10 @@ uint16_t MicroGraderCore::sendMessage(code_t code,
     // Next, send the body
     Serial.write(msg, msg_len);
     Serial.send_now();
+
+    if (!expects_resp) {
+        return 0;
+    }
 
     // Wait for and process response
     elapsedMicros t = 0;

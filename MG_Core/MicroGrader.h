@@ -64,8 +64,16 @@ class MicroGraderCore { // Essentially a static class to wrap all communication
     void begin(MG_Mode, uint8_t []);
     void debug(String);
 
-    uint16_t sendMessage(code_t, uint8_t *, msg_size_t);
-    uint16_t sendMessage(code_t, uint8_t *, msg_size_t, uint8_t *, msg_size_t);
+
+    uint16_t sendMessage(code_t code, uint8_t *msg, msg_size_t msg_len);
+    uint16_t sendMessage(code_t code, uint8_t *msg, msg_size_t msg_len,
+                         bool expects_resp);
+    uint16_t sendMessage(code_t code, uint8_t *msg, msg_size_t msg_len,
+                         uint8_t *resp, msg_size_t resp_len);
+    uint16_t sendMessage(code_t code, uint8_t *msg, msg_size_t msg_len,
+                         uint8_t *resp, msg_size_t resp_len,
+                         bool expects_resp);
+
     void error(MG_ErrorType);
 
     MG_Mode mg_mode = INACTIVE;
